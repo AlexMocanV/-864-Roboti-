@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+std::ifstream fin("roboti.in");
+std::ofstream fout("roboti.out");
+int n,m;
+bool mat[1001][1001];
+int dx[]={1,-1,0,0};
+int dy[]={0,0,1,-1};
+std::queue<std::pair<int,int>>q;
+int drum[1001][1001];
+bool bun(int i,int j)
+{
+    return(i>=1&&i<=n&&j>=1&&j<=m);
+}
+void lee(int is,int js)
+{
+    q.push(std::make_pair(is,js));
+    drum[is][js]=1;
+    while(!q.empty())
+    {
+        int x=q.front().first;
+        int y=q.front().second;
+        q.pop();
+        for(int i=0;i<4;i++)
+        {
+            if(bun(x+dx[i],y+dy[i])&&drum[x+dx[i]][y+dy[i]]==0&&mat[x+dx[i]][y+dy[i]]==0)
+            {
+                drum[x+dx[i]][y+dy[i]]=drum[x][y]+1;
+                q.push(std::make_pair(x+dx[i],y+dy[i]));
+            }
+        }
+    }
+}
+
+int main()
+{
+    fin>>n>>m;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=m;j++)
+        {
+            fin>>mat[i][j];
+        }
+    }
+    int istart,jstart,ansx,ansy;
+    fin>>istart>>jstart>>ansx>>ansy;
+    lee(istart,jstart);
+    fout<<drum[ansx][ansy]-1;
+    return 0;
+}
